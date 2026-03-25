@@ -59,7 +59,10 @@ export default function SettingsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Settings</h1>
+      <div className="mb-6">
+        <h1 className="text-2xl font-black text-gray-900">Settings</h1>
+        <p className="text-sm text-gray-500 mt-0.5">Customize your brand appearance and domain</p>
+      </div>
 
       <form onSubmit={handleSave} className="max-w-md space-y-5">
         <div className="space-y-1">
@@ -106,12 +109,14 @@ export default function SettingsPage() {
           </p>
         </div>
 
-        {error && <p className="text-sm text-destructive">{error}</p>}
-        {saved && <p className="text-sm text-green-600 font-medium">✓ Settings saved</p>}
+        {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
+        {saved && <p className="text-sm text-green-600 font-semibold">✓ Settings saved</p>}
 
-        <Button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading}
+          className="px-6 py-2.5 rounded-xl font-bold text-white text-sm transition-all active:scale-95 disabled:opacity-60 shadow-md"
+          style={{ background: primaryColor || '#1a1a2e' }}>
           {loading ? 'Saving...' : 'Save Settings'}
-        </Button>
+        </button>
       </form>
     </div>
   )

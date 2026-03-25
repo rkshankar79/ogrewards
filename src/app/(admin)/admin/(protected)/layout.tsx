@@ -18,9 +18,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!adminRecord) redirect('/admin/login?error=not_authorized')
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50">
       <AdminSidebar brand={adminRecord.brand as any} />
-      <main className="flex-1 p-6 overflow-auto">
+      <main className="flex-1 p-8 overflow-auto">
         {children}
       </main>
     </div>

@@ -25,7 +25,10 @@ export default async function SKUsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">SKU Manager</h1>
+        <div>
+          <h1 className="text-2xl font-black text-gray-900">SKU Manager</h1>
+          <p className="text-sm text-gray-500 mt-0.5">Manage your product catalog for receipt scanning</p>
+        </div>
       </div>
       <SKUManager skus={skus || []} brandId={adminRecord.brand_id} />
     </div>

@@ -59,76 +59,86 @@ export default async function ReportsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Reports</h1>
+      <div className="mb-6">
+        <h1 className="text-2xl font-black text-gray-900">Reports</h1>
+        <p className="text-sm text-gray-500 mt-0.5">Analytics and performance insights</p>
+      </div>
 
       <div className="grid md:grid-cols-2 gap-6">
         {/* User levels */}
-        <div className="rounded-xl border p-5">
-          <h2 className="font-semibold mb-4">User Level Distribution</h2>
+        <div className="rounded-xl border border-gray-100 bg-white shadow-sm p-5">
+          <h2 className="font-bold text-gray-900 mb-4">👥 User Level Distribution</h2>
           <div className="space-y-3">
-            {Object.entries(levels).map(([level, count]) => (
-              <div key={level} className="flex items-center justify-between">
-                <span className="capitalize text-sm font-medium">{level}</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-32 h-2 rounded-full bg-muted overflow-hidden">
-                    <div
-                      className="h-full bg-primary rounded-full"
-                      style={{ width: `${levelCounts?.length ? (count / levelCounts.length) * 100 : 0}%` }}
-                    />
+            {[
+              { level: 'recruit', label: '⚡ Recruit', color: 'bg-gray-400' },
+              { level: 'vigilante', label: '🦸 Vigilante', color: 'bg-blue-500' },
+              { level: 'hero', label: '🏆 Hero', color: 'bg-purple-500' },
+              { level: 'legend', label: '👑 Legend', color: 'bg-amber-500' },
+            ].map(({ level, label, color }) => {
+              const count = levels[level as keyof typeof levels]
+              const pct = levelCounts?.length ? (count / levelCounts.length) * 100 : 0
+              return (
+                <div key={level} className="flex items-center justify-between gap-3">
+                  <span className="text-sm font-medium text-gray-700 w-28">{label}</span>
+                  <div className="flex-1 h-2 rounded-full bg-gray-100 overflow-hidden">
+                    <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
                   </div>
-                  <span className="text-sm text-muted-foreground w-6 text-right">{count}</span>
+                  <span className="text-sm font-bold text-gray-600 w-4 text-right">{count}</span>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
 
         {/* Top dispensaries */}
-        <div className="rounded-xl border p-5">
-          <h2 className="font-semibold mb-4">Top Dispensaries</h2>
+        <div className="rounded-xl border border-gray-100 bg-white shadow-sm p-5">
+          <h2 className="font-bold text-gray-900 mb-4">🏪 Top Dispensaries</h2>
           {topStoresList.length > 0 ? (
             <div className="space-y-2">
-              {topStoresList.map(([store, count]) => (
-                <div key={store} className="flex justify-between text-sm">
-                  <span className="font-medium">{store}</span>
-                  <span className="text-muted-foreground">{count} scan{count !== 1 ? 's' : ''}</span>
+              {topStoresList.map(([store, count], i) => (
+                <div key={store} className="flex justify-between items-center py-1.5 border-b border-gray-50 last:border-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-black text-gray-300 w-4">#{i + 1}</span>
+                    <span className="font-medium text-sm text-gray-800">{store}</span>
+                  </div>
+                  <span className="text-xs font-semibold text-gray-400">{count} scan{count !== 1 ? 's' : ''}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">No data yet</p>
+            <p className="text-sm text-gray-400">No data yet</p>
           )}
         </div>
 
         {/* Scan quality */}
-        <div className="rounded-xl border p-5">
-          <h2 className="font-semibold mb-4">Scan Quality</h2>
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Duplicate receipts</span>
-              <span className="font-medium">{totalDuplicates || 0}</span>
+        <div className="rounded-xl border border-gray-100 bg-white shadow-sm p-5">
+          <h2 className="font-bold text-gray-900 mb-4">🔍 Scan Quality</h2>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-amber-50 border border-amber-100">
+              <span className="text-sm font-medium text-amber-700">Duplicate receipts</span>
+              <span className="font-black text-amber-700">{totalDuplicates || 0}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">No match found</span>
-              <span className="font-medium">{totalRejected || 0}</span>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-red-50 border border-red-100">
+              <span className="text-sm font-medium text-red-700">No match found</span>
+              <span className="font-black text-red-700">{totalRejected || 0}</span>
             </div>
           </div>
         </div>
 
         {/* Last 7 days */}
-        <div className="rounded-xl border p-5">
-          <h2 className="font-semibold mb-4">Last 7 Days</h2>
+        <div className="rounded-xl border border-gray-100 bg-white shadow-sm p-5">
+          <h2 className="font-bold text-gray-900 mb-4">📅 Last 7 Days</h2>
           {dailyList.length > 0 ? (
             <div className="space-y-2">
               {dailyList.map(([day, data]) => (
-                <div key={day} className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{day}</span>
-                  <span>{data.scans} scans · <span className="font-medium">${data.earned.toFixed(2)}</span> earned</span>
+                <div key={day} className="flex justify-between items-center py-1.5 border-b border-gray-50 last:border-0">
+                  <span className="text-xs text-gray-400">{day}</span>
+                  <span className="text-sm">{data.scans} scans · <span className="font-bold text-green-600">${data.earned.toFixed(2)}</span></span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">No scans in last 7 days</p>
+            <p className="text-sm text-gray-400">No scans in last 7 days</p>
           )}
         </div>
       </div>

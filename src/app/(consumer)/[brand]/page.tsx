@@ -4,10 +4,6 @@ import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useBrand } from '@/lib/brand-context'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Checkbox } from '@/components/ui/checkbox'
 
 function getAge(dob: string): number {
   const today = new Date()
@@ -45,14 +41,8 @@ export default function LandingPage() {
     setError('')
 
     if (mode === 'signup') {
-      if (getAge(dob) < 21) {
-        setError('You must be 21 or older to participate.')
-        return
-      }
-      if (!stateConfirm || !termsConfirm) {
-        setError('Please confirm all requirements.')
-        return
-      }
+      if (getAge(dob) < 21) { setError('You must be 21 or older to participate.'); return }
+      if (!stateConfirm || !termsConfirm) { setError('Please confirm all requirements.'); return }
     }
 
     setLoading(true)
@@ -61,152 +51,108 @@ export default function LandingPage() {
       email,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback?brand=${params.brand}`,
-        data: mode === 'signup' ? {
-          date_of_birth: dob,
-          state: 'IL',
-          brand_slug: params.brand,
-        } : {},
+        data: mode === 'signup' ? { date_of_birth: dob, state: 'IL', brand_slug: params.brand } : {},
       },
     })
 
-    if (authError) {
-      setError(authError.message)
-      setLoading(false)
-      return
-    }
-
+    if (authError) { setError(authError.message); setLoading(false); return }
     router.push(`/${params.brand}/check-email?email=${encodeURIComponent(email)}`)
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
-      {/* Brand Header */}
-      <div className="mb-8 text-center">
+    <div className="min-h-screen bg-white flex flex-col">
+      {/* Top brand bar */}
+      <div className="px-5 pt-12 pb-8 text-center">
         {brand.logo_url ? (
           <img src={brand.logo_url} alt={brand.name} className="h-16 mx-auto mb-4 object-contain" />
         ) : (
           <div
-            className="h-16 w-16 rounded-full mx-auto mb-4 flex items-center justify-center text-white font-bold text-2xl"
-            style={{ backgroundColor: brand.primary_color }}
-          >
+            className="h-16 w-16 rounded-2xl mx-auto mb-4 flex items-center justify-center text-2xl font-black text-white"
+            style={{ backgroundColor: brand.primary_color }}>
             {brand.name[0]}
           </div>
         )}
-        <h1 className="text-2xl font-bold">{brand.name} Rewards</h1>
-        <p className="text-muted-foreground mt-1">Scan receipts. Earn real cash back.</p>
+        <h1 className="text-2xl font-black text-gray-900">{brand.name} Rewards</h1>
+        <p className="text-gray-900 text-sm mt-1">Scan receipts. Get real cash back.</p>
       </div>
 
-      {/* How it works — sign up only */}
-      {mode === 'signup' && (
-        <div className="w-full max-w-sm mb-8">
-          <div className="grid grid-cols-3 gap-3 text-center">
-            {[
-              { step: '1', label: 'Buy', desc: `${brand.name} products` },
-              { step: '2', label: 'Scan', desc: 'Your receipt' },
-              { step: '3', label: 'Earn', desc: 'Real cash back' },
-            ].map(({ step, label, desc }) => (
-              <div key={step} className="flex flex-col items-center gap-1">
-                <div
-                  className="h-10 w-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                  style={{ backgroundColor: brand.primary_color }}
-                >
-                  {step}
-                </div>
-                <span className="font-semibold text-sm">{label}</span>
-                <span className="text-xs text-muted-foreground">{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Mode toggle */}
-      <div className="w-full max-w-sm mb-6">
-        <div className="flex rounded-lg border overflow-hidden">
+      {/* Form */}
+      <div className="flex-1 px-5 max-w-sm mx-auto w-full">
+        {/* Tab toggle */}
+        <div className="flex rounded-xl overflow-hidden border border-gray-200 mb-6 p-1 bg-gray-50">
           {(['signup', 'signin'] as const).map(m => (
-            <button
-              key={m}
-              type="button"
-              onClick={() => switchMode(m)}
-              className="flex-1 py-2 text-sm font-medium transition-colors"
+            <button key={m} type="button" onClick={() => switchMode(m)}
+              className="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
               style={{
                 backgroundColor: mode === m ? brand.primary_color : 'transparent',
-                color: mode === m ? '#fff' : 'inherit',
-              }}
-            >
+                color: mode === m ? '#fff' : '#6b7280',
+              }}>
               {m === 'signup' ? 'Create Account' : 'Sign In'}
             </button>
           ))}
         </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+            <input
+              id="email" type="email" placeholder="you@example.com"
+              value={email} onChange={e => setEmail(e.target.value)} required
+              className="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 text-base focus:outline-none focus:ring-2 focus:border-transparent"
+              style={{ '--tw-ring-color': brand.primary_color } as React.CSSProperties}
+            />
+            <p className="text-xs text-gray-400 mt-1">We'll send a magic link — no password needed.</p>
+          </div>
+
+          {mode === 'signup' && (
+            <>
+              <div>
+                <label htmlFor="dob" className="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                <input
+                  id="dob" type="date" value={dob} onChange={e => setDob(e.target.value)} required
+                  className="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:border-transparent"
+                  style={{ '--tw-ring-color': brand.primary_color } as React.CSSProperties}
+                />
+                <p className="text-xs text-gray-400 mt-1">Must be 21 or older</p>
+              </div>
+
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox" checked={stateConfirm} onChange={e => setStateConfirm(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-current flex-shrink-0"
+                  style={{ accentColor: brand.primary_color }}
+                />
+                <span className="text-sm text-gray-600">I confirm I am an Illinois resident and cannabis consumer</span>
+              </label>
+
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox" checked={termsConfirm} onChange={e => setTermsConfirm(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-gray-300 flex-shrink-0"
+                  style={{ accentColor: brand.primary_color }}
+                />
+                <span className="text-sm text-gray-600">I agree to the Terms & Conditions. No purchase necessary to join.</span>
+              </label>
+            </>
+          )}
+
+          {error && (
+            <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600">
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit" disabled={loading}
+            className="w-full h-12 rounded-xl font-bold text-white text-base transition-all active:scale-95 disabled:opacity-60"
+            style={{ backgroundColor: brand.primary_color }}>
+            {loading ? 'Sending link...' : 'Send My Magic Link'}
+          </button>
+        </form>
+
       </div>
 
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
-        <div className="space-y-1">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-          />
-          <p className="text-xs text-muted-foreground">
-            We'll send a magic link — no password needed.
-          </p>
-        </div>
-
-        {/* Sign up only fields */}
-        {mode === 'signup' && (
-          <>
-            <div className="space-y-1">
-              <Label htmlFor="dob">Date of Birth</Label>
-              <Input
-                id="dob"
-                type="date"
-                value={dob}
-                onChange={e => setDob(e.target.value)}
-                required
-              />
-              <p className="text-xs text-muted-foreground">Must be 21 or older to participate</p>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <Checkbox
-                id="state"
-                checked={stateConfirm}
-                onCheckedChange={v => setStateConfirm(!!v)}
-              />
-              <Label htmlFor="state" className="text-sm leading-relaxed cursor-pointer">
-                I confirm I am an Illinois resident and cannabis consumer
-              </Label>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <Checkbox
-                id="terms"
-                checked={termsConfirm}
-                onCheckedChange={v => setTermsConfirm(!!v)}
-              />
-              <Label htmlFor="terms" className="text-sm leading-relaxed cursor-pointer">
-                I agree to the Terms & Conditions. No purchase necessary to join.
-              </Label>
-            </div>
-          </>
-        )}
-
-        {error && <p className="text-sm text-destructive">{error}</p>}
-
-        <Button
-          type="submit"
-          className="w-full text-white"
-          style={{ backgroundColor: brand.primary_color }}
-          disabled={loading}
-        >
-          {loading ? 'Sending your link...' : 'Send My Magic Link'}
-        </Button>
-      </form>
+      <p className="text-center text-xs text-gray-300 py-6">Powered by OGRewards</p>
     </div>
   )
 }
