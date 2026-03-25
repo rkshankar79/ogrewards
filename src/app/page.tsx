@@ -89,7 +89,7 @@ export default function HomePage() {
                 { step: '03', title: 'Get real cash', desc: 'Reward lands in their Venmo or PayPal. No gift cards, no points — actual money.' },
               ].map(({ step, title, desc }) => (
                 <div key={step} className="flex gap-5">
-                  <span className="text-3xl font-black text-gray-100 leading-none mt-0.5 w-10 flex-shrink-0">{step}</span>
+                  <span className="text-3xl font-black text-gray-900 leading-none mt-0.5 w-10 flex-shrink-0">{step}</span>
                   <div>
                     <p className="font-bold text-gray-900 mb-1">{title}</p>
                     <p className="text-gray-900 text-sm leading-relaxed">{desc}</p>
