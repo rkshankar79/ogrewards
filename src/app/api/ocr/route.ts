@@ -1,4 +1,4 @@
-import { createServiceClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { scanReceipt } from '@/lib/anthropic/ocr'
 import { NextRequest, NextResponse } from 'next/server'
 import { createHash } from 'crypto'
@@ -12,7 +12,9 @@ const REWARD_RATES: Record<string, Record<string, number>> = {
 }
 
 export async function POST(request: NextRequest) {
-  const supabase = await createServiceClient()
+  // Use anon client for auth (reads user session from cookie)
+  const supabase = await createClient()
+  const serviceSupabase = await createServiceClient()
 
   // Auth check
   const { data: { user } } = await supabase.auth.getUser()
@@ -33,10 +35,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid file type. Use JPG, PNG, or WebP.' }, { status: 400 })
   }
 
-  // Fetch brand and wallet
+  // Fetch brand and wallet (service client for unrestricted reads)
   const [{ data: brand }, { data: wallet }] = await Promise.all([
-    supabase.from('brands').select('*').eq('id', brandId).single(),
-    supabase.from('brand_wallets').select('*').eq('id', walletId).eq('user_id', user.id).single(),
+    serviceSupabase.from('brands').select('*').eq('id', brandId).single(),
+    serviceSupabase.from('brand_wallets').select('*').eq('id', walletId).eq('user_id', user.id).single(),
   ])
 
   if (!brand) return NextResponse.json({ error: 'Brand not found' }, { status: 404 })
@@ -49,7 +51,7 @@ export async function POST(request: NextRequest) {
 
   // Velocity limit — max scans per 24 hours
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-  const { count } = await supabase
+  const { count } = await serviceSupabase
     .from('scans')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', user.id)
@@ -67,14 +69,15 @@ export async function POST(request: NextRequest) {
   const base64 = buffer.toString('base64')
   const mediaType = file.type as 'image/jpeg' | 'image/png' | 'image/webp'
 
-  // Upload to Supabase Storage
+  // Upload to Supabase Storage using service client
   const fileName = `${user.id}/${brandId}/${Date.now()}.${file.type.split('/')[1]}`
-  const { data: uploadData, error: uploadError } = await supabase.storage
+  const { data: uploadData, error: uploadError } = await serviceSupabase.storage
     .from('receipts')
     .upload(fileName, buffer, { contentType: file.type })
 
   if (uploadError) {
-    return NextResponse.json({ error: 'Failed to upload receipt image.' }, { status: 500 })
+    console.error('Storage upload error:', uploadError)
+    return NextResponse.json({ error: `Failed to upload receipt image: ${uploadError.message}` }, { status: 500 })
   }
 
   const imageUrl = uploadData.path
@@ -92,7 +95,7 @@ export async function POST(request: NextRequest) {
   const receiptHash = createHash('sha256').update(hashInput).digest('hex')
 
   // Check for duplicate
-  const { data: existing } = await supabase
+  const { data: existing } = await serviceSupabase
     .from('scans')
     .select('id')
     .eq('receipt_hash', receiptHash)
@@ -100,7 +103,7 @@ export async function POST(request: NextRequest) {
     .single()
 
   if (existing) {
-    await supabase.from('scans').insert({
+    await serviceSupabase.from('scans').insert({
       user_id: user.id,
       brand_id: brandId,
       image_url: imageUrl,
@@ -117,7 +120,7 @@ export async function POST(request: NextRequest) {
 
   // No matched products
   if (!ocrResult.matched_products || ocrResult.matched_products.length === 0) {
-    await supabase.from('scans').insert({
+    await serviceSupabase.from('scans').insert({
       user_id: user.id,
       brand_id: brandId,
       image_url: imageUrl,
@@ -154,7 +157,7 @@ export async function POST(request: NextRequest) {
   else if (newScanCount >= 3) newLevel = 'vigilante'
 
   // Write scan record
-  await supabase.from('scans').insert({
+  await serviceSupabase.from('scans').insert({
     user_id: user.id,
     brand_id: brandId,
     image_url: imageUrl,
@@ -168,7 +171,7 @@ export async function POST(request: NextRequest) {
   })
 
   // Update wallet balance, scan count, level
-  await supabase.from('brand_wallets').update({
+  await serviceSupabase.from('brand_wallets').update({
     balance: Number(wallet.balance) + totalReward,
     total_earned: Number(wallet.total_earned) + totalReward,
     scan_count: newScanCount,
@@ -176,7 +179,7 @@ export async function POST(request: NextRequest) {
   }).eq('id', walletId)
 
   // Deduct from brand reward pool
-  await supabase.from('brands').update({
+  await serviceSupabase.from('brands').update({
     reward_pool_balance: Number(brand.reward_pool_balance) - totalReward,
   }).eq('id', brandId)
 
