@@ -8,7 +8,7 @@ export default function HomePage() {
         <div className="flex items-center gap-6">
           <a href="#how" className="hidden md:block text-sm font-medium text-gray-900 hover:opacity-70 transition-opacity">How it works</a>
           <a href="#pricing" className="hidden md:block text-sm font-medium text-gray-900 hover:opacity-70 transition-opacity">Pricing</a>
-          <a href="/admin/login" className="hidden md:block text-sm font-medium text-gray-900 hover:opacity-70 transition-opacity">Brand Login</a>
+          <a href="/login" className="hidden md:block text-sm font-medium text-gray-900 hover:opacity-70 transition-opacity">Login</a>
           <a href="mailto:admin@ogrewards.io"
             className="px-4 py-2 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
             style={{ backgroundColor: '#1a1a2e' }}>
@@ -217,32 +217,6 @@ export default function HomePage() {
               </a>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* Login clarity section */}
-      <section className="bg-gray-50 border-y border-gray-100 px-6 md:px-16 py-16">
-        <div className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl border border-gray-100 p-7 shadow-sm">
-            <div className="text-3xl mb-4">🛒</div>
-            <h3 className="text-lg font-black text-gray-900 mb-2">I'm a customer</h3>
-            <p className="text-gray-900 text-sm mb-5">Scan your receipt and earn cash back on Night Phantom products.</p>
-            <a href="/nightphantom"
-              className="block text-center py-3 rounded-xl font-bold text-white text-sm transition-all hover:opacity-90"
-              style={{ backgroundColor: '#6d28d9' }}>
-              Night Phantom Rewards →
-            </a>
-          </div>
-          <div className="bg-white rounded-2xl border border-gray-100 p-7 shadow-sm">
-            <div className="text-3xl mb-4">🏢</div>
-            <h3 className="text-lg font-black text-gray-900 mb-2">I'm a brand owner</h3>
-            <p className="text-gray-900 text-sm mb-5">Manage your reward pool, view scans, and track payouts in the admin portal.</p>
-            <a href="/admin/login"
-              className="block text-center py-3 rounded-xl font-bold text-white text-sm transition-all hover:opacity-90"
-              style={{ backgroundColor: '#1a1a2e' }}>
-              Brand Admin Login →
-            </a>
-          </div>
         </div>
       </section>
 
