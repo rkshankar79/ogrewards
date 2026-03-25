@@ -120,6 +120,9 @@ export default function LandingPage() {
             onChange={e => setEmail(e.target.value)}
             required
           />
+          <p className="text-xs text-muted-foreground">
+            We'll send a magic link — no password needed.
+          </p>
         </div>
 
         <div className="space-y-1">
@@ -166,7 +169,7 @@ export default function LandingPage() {
           style={{ backgroundColor: brand.primary_color }}
           disabled={loading}
         >
-          {loading ? 'Sending magic link...' : 'Start Earning Cash Back'}
+          {loading ? 'Sending your link...' : 'Send My Magic Link'}
         </Button>
 
         <p className="text-xs text-center text-muted-foreground">
