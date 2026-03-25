@@ -14,7 +14,7 @@ const REWARD_RATES: Record<string, Record<string, number>> = {
 export async function POST(request: NextRequest) {
   // Use anon client for auth (reads user session from cookie)
   const supabase = await createClient()
-  const serviceSupabase = await createServiceClient()
+  const serviceSupabase = createServiceClient()
 
   // Auth check
   const { data: { user } } = await supabase.auth.getUser()
