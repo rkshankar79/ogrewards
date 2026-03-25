@@ -1,21 +1,10 @@
+import MarketingNav from '@/components/marketing-nav'
+
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white text-gray-900 font-sans">
 
-      {/* Nav */}
-      <nav className="flex items-center justify-between px-6 md:px-16 py-5 border-b border-gray-100">
-        <span className="text-xl font-black tracking-tight">OGRewards</span>
-        <div className="flex items-center gap-6">
-          <a href="#how" className="hidden md:block text-sm font-medium text-gray-900 hover:opacity-70 transition-opacity">How it works</a>
-          <a href="#pricing" className="hidden md:block text-sm font-medium text-gray-900 hover:opacity-70 transition-opacity">Pricing</a>
-          <a href="/login" className="hidden md:block text-sm font-medium text-gray-900 hover:opacity-70 transition-opacity">Login</a>
-          <a href="mailto:admin@ogrewards.io"
-            className="px-4 py-2 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
-            style={{ backgroundColor: '#1a1a2e' }}>
-            Get Started
-          </a>
-        </div>
-      </nav>
+      <MarketingNav />
 
       {/* Hero */}
       <section className="px-6 md:px-16 pt-20 pb-24 max-w-6xl mx-auto">
