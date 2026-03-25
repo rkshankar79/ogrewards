@@ -24,6 +24,7 @@ export default function LandingPage() {
   const router = useRouter()
   const supabase = createClient()
 
+  const [mode, setMode] = useState<'signup' | 'signin'>('signup')
   const [email, setEmail] = useState('')
   const [dob, setDob] = useState('')
   const [stateConfirm, setStateConfirm] = useState(false)
@@ -31,18 +32,27 @@ export default function LandingPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  function switchMode(next: 'signup' | 'signin') {
+    setMode(next)
+    setError('')
+    setDob('')
+    setStateConfirm(false)
+    setTermsConfirm(false)
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
 
-    if (getAge(dob) < 21) {
-      setError('You must be 21 or older to participate.')
-      return
-    }
-
-    if (!stateConfirm || !termsConfirm) {
-      setError('Please confirm all requirements.')
-      return
+    if (mode === 'signup') {
+      if (getAge(dob) < 21) {
+        setError('You must be 21 or older to participate.')
+        return
+      }
+      if (!stateConfirm || !termsConfirm) {
+        setError('Please confirm all requirements.')
+        return
+      }
     }
 
     setLoading(true)
@@ -51,11 +61,11 @@ export default function LandingPage() {
       email,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback?brand=${params.brand}`,
-        data: {
+        data: mode === 'signup' ? {
           date_of_birth: dob,
           state: 'IL',
           brand_slug: params.brand,
-        },
+        } : {},
       },
     })
 
@@ -86,29 +96,51 @@ export default function LandingPage() {
         <p className="text-muted-foreground mt-1">Scan receipts. Earn real cash back.</p>
       </div>
 
-      {/* How it works */}
-      <div className="w-full max-w-sm mb-8">
-        <div className="grid grid-cols-3 gap-3 text-center">
-          {[
-            { step: '1', label: 'Buy', desc: `${brand.name} products` },
-            { step: '2', label: 'Scan', desc: 'Your receipt' },
-            { step: '3', label: 'Earn', desc: 'Real cash back' },
-          ].map(({ step, label, desc }) => (
-            <div key={step} className="flex flex-col items-center gap-1">
-              <div
-                className="h-10 w-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                style={{ backgroundColor: brand.primary_color }}
-              >
-                {step}
+      {/* How it works — sign up only */}
+      {mode === 'signup' && (
+        <div className="w-full max-w-sm mb-8">
+          <div className="grid grid-cols-3 gap-3 text-center">
+            {[
+              { step: '1', label: 'Buy', desc: `${brand.name} products` },
+              { step: '2', label: 'Scan', desc: 'Your receipt' },
+              { step: '3', label: 'Earn', desc: 'Real cash back' },
+            ].map(({ step, label, desc }) => (
+              <div key={step} className="flex flex-col items-center gap-1">
+                <div
+                  className="h-10 w-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                  style={{ backgroundColor: brand.primary_color }}
+                >
+                  {step}
+                </div>
+                <span className="font-semibold text-sm">{label}</span>
+                <span className="text-xs text-muted-foreground">{desc}</span>
               </div>
-              <span className="font-semibold text-sm">{label}</span>
-              <span className="text-xs text-muted-foreground">{desc}</span>
-            </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Mode toggle */}
+      <div className="w-full max-w-sm mb-6">
+        <div className="flex rounded-lg border overflow-hidden">
+          {(['signup', 'signin'] as const).map(m => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => switchMode(m)}
+              className="flex-1 py-2 text-sm font-medium transition-colors"
+              style={{
+                backgroundColor: mode === m ? brand.primary_color : 'transparent',
+                color: mode === m ? '#fff' : 'inherit',
+              }}
+            >
+              {m === 'signup' ? 'Create Account' : 'Sign In'}
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Sign Up Form */}
+      {/* Form */}
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
         <div className="space-y-1">
           <Label htmlFor="email">Email</Label>
@@ -125,43 +157,46 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div className="space-y-1">
-          <Label htmlFor="dob">Date of Birth</Label>
-          <Input
-            id="dob"
-            type="date"
-            value={dob}
-            onChange={e => setDob(e.target.value)}
-            required
-          />
-          <p className="text-xs text-muted-foreground">Must be 21 or older to participate</p>
-        </div>
+        {/* Sign up only fields */}
+        {mode === 'signup' && (
+          <>
+            <div className="space-y-1">
+              <Label htmlFor="dob">Date of Birth</Label>
+              <Input
+                id="dob"
+                type="date"
+                value={dob}
+                onChange={e => setDob(e.target.value)}
+                required
+              />
+              <p className="text-xs text-muted-foreground">Must be 21 or older to participate</p>
+            </div>
 
-        <div className="flex items-start gap-3">
-          <Checkbox
-            id="state"
-            checked={stateConfirm}
-            onCheckedChange={v => setStateConfirm(!!v)}
-          />
-          <Label htmlFor="state" className="text-sm leading-relaxed cursor-pointer">
-            I confirm I am an Illinois resident and cannabis consumer
-          </Label>
-        </div>
+            <div className="flex items-start gap-3">
+              <Checkbox
+                id="state"
+                checked={stateConfirm}
+                onCheckedChange={v => setStateConfirm(!!v)}
+              />
+              <Label htmlFor="state" className="text-sm leading-relaxed cursor-pointer">
+                I confirm I am an Illinois resident and cannabis consumer
+              </Label>
+            </div>
 
-        <div className="flex items-start gap-3">
-          <Checkbox
-            id="terms"
-            checked={termsConfirm}
-            onCheckedChange={v => setTermsConfirm(!!v)}
-          />
-          <Label htmlFor="terms" className="text-sm leading-relaxed cursor-pointer">
-            I agree to the Terms & Conditions. No purchase necessary to join.
-          </Label>
-        </div>
-
-        {error && (
-          <p className="text-sm text-destructive">{error}</p>
+            <div className="flex items-start gap-3">
+              <Checkbox
+                id="terms"
+                checked={termsConfirm}
+                onCheckedChange={v => setTermsConfirm(!!v)}
+              />
+              <Label htmlFor="terms" className="text-sm leading-relaxed cursor-pointer">
+                I agree to the Terms & Conditions. No purchase necessary to join.
+              </Label>
+            </div>
+          </>
         )}
+
+        {error && <p className="text-sm text-destructive">{error}</p>}
 
         <Button
           type="submit"
@@ -171,10 +206,6 @@ export default function LandingPage() {
         >
           {loading ? 'Sending your link...' : 'Send My Magic Link'}
         </Button>
-
-        <p className="text-xs text-center text-muted-foreground">
-          Already have an account? Enter your email above to sign in.
-        </p>
       </form>
     </div>
   )
