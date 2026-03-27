@@ -27,7 +27,7 @@ export default function LoginPage() {
             className="flex items-center justify-between w-full px-5 py-4 rounded-2xl border font-semibold text-white transition-all hover:border-opacity-60"
             style={{ backgroundColor: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)' }}>
             <div className="flex items-center gap-3">
-              <span className="text-xl">🛒</span>
+              <span className="text-xl">💵</span>
               <div className="text-left">
                 <p className="font-bold text-white text-sm">I'm a Customer</p>
                 <p className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>Earn free cash back</p>
@@ -40,7 +40,7 @@ export default function LoginPage() {
             className="flex items-center justify-between w-full px-5 py-4 rounded-2xl border font-semibold text-white transition-all hover:border-opacity-60"
             style={{ backgroundColor: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)' }}>
             <div className="flex items-center gap-3">
-              <span className="text-xl">🏢</span>
+              <span className="text-xl">⚡</span>
               <div className="text-left">
                 <p className="font-bold text-white text-sm">I'm a Brand Owner</p>
                 <p className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>Manage rewards portal</p>

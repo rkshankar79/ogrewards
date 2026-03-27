@@ -20,15 +20,10 @@ export default function MarketingNav() {
       </div>
 
       <div className="hidden md:flex items-center gap-3">
-        <a href="/admin/login"
-          className="px-4 py-2 rounded-full text-sm font-bold border transition-all hover:bg-white/10"
-          style={{ borderColor: '#00d084', color: '#00d084' }}>
-          Brand Login
-        </a>
         <a href="/login"
-          className="px-4 py-2 rounded-full text-sm font-bold text-black transition-all hover:opacity-90"
+          className="px-5 py-2 rounded-full text-sm font-bold text-black transition-all hover:opacity-90"
           style={{ backgroundColor: '#00d084' }}>
-          Customer Portal
+          Login
         </a>
       </div>
 
@@ -45,9 +40,8 @@ export default function MarketingNav() {
           <a href="#how" onClick={() => setOpen(false)} className="px-6 py-4 text-sm text-white/70 border-b border-white/10 hover:text-white">How it works</a>
           <a href="#pricing" onClick={() => setOpen(false)} className="px-6 py-4 text-sm text-white/70 border-b border-white/10 hover:text-white">Pricing</a>
           <a href="#brands" onClick={() => setOpen(false)} className="px-6 py-4 text-sm text-white/70 border-b border-white/10 hover:text-white">Brands</a>
-          <a href="/admin/login" onClick={() => setOpen(false)} className="px-6 py-4 text-sm font-bold border-b border-white/10" style={{ color: '#00d084' }}>Brand Login</a>
           <div className="px-6 py-4">
-            <a href="/login" className="block text-center px-4 py-3 rounded-full text-sm font-bold text-black" style={{ backgroundColor: '#00d084' }}>Customer Portal</a>
+            <a href="/login" className="block text-center px-4 py-3 rounded-full text-sm font-bold text-black" style={{ backgroundColor: '#00d084' }}>Login</a>
           </div>
         </div>
       )}
