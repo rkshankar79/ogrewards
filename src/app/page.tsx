@@ -189,24 +189,24 @@ export default function HomePage() {
           <div className="text-center mb-16">
             <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: GREEN }}>Pricing</p>
             <h2 className="text-3xl md:text-4xl font-black mb-4">Simple, transparent pricing</h2>
-            <p style={{ color: 'rgba(255,255,255,0.5)' }}>One flat monthly fee. Pool funding and ACH processing included — no hidden transaction fees.</p>
+            <p style={{ color: 'rgba(255,255,255,0.5)' }}>One flat monthly fee. You fund your reward pool — we cover all ACH processing fees.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
                 name: 'Starter', price: '$99', setup: '$299 setup', desc: 'Perfect for new brands testing loyalty.',
-                features: ['Up to 500 scans/mo', '$500/mo pool funding included', 'No per-transaction fees', 'Basic analytics', 'Email support', 'Custom brand colors'],
+                features: ['Up to 500 scans/mo', 'Up to $500/mo in pool deposits', 'No ACH processing fees', 'Basic analytics', 'Email support', 'Custom brand colors'],
                 highlight: false,
               },
               {
                 name: 'Growth', price: '$199', setup: '$299 setup', desc: 'For brands ready to scale loyalty.',
-                features: ['Up to 2,000 scans/mo', '$2,000/mo pool funding included', 'No per-transaction fees', 'Full analytics + reports', 'Priority support', 'Custom brand domain'],
+                features: ['Up to 2,000 scans/mo', 'Up to $2,000/mo in pool deposits', 'No ACH processing fees', 'Full analytics + reports', 'Priority support', 'Custom brand domain'],
                 highlight: true,
               },
               {
                 name: 'Pro', price: '$399', setup: '$299 setup', desc: 'High-volume or multi-brand operations.',
-                features: ['Unlimited scans', 'Unlimited pool funding', 'No per-transaction fees', 'Multi-brand dashboard', 'Dedicated support', 'White-label everything'],
+                features: ['Unlimited scans', 'Unlimited pool deposits', 'No ACH processing fees', 'Multi-brand dashboard', 'Dedicated support', 'White-label everything'],
                 highlight: false,
               },
             ].map(({ name, price, setup, desc, features, highlight }) => (
