@@ -28,9 +28,13 @@ export default function HomePage() {
                 <span style={{ color: GREEN }}>Reward Fans</span><br />
                 Directly.
               </h1>
-              <p className="text-lg leading-relaxed mb-10 max-w-lg" style={{ color: 'rgba(255,255,255,0.6)' }}>
+              <p className="text-lg leading-relaxed mb-6 max-w-lg" style={{ color: 'rgba(255,255,255,0.6)' }}>
                 Boost loyalty and increase sales with seamless direct-to-customer cash rewards. No complex POS integration required. Customers scan a receipt, you reward them via Venmo or PayPal.
               </p>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6 border"
+                style={{ borderColor: 'rgba(0,208,132,0.3)', color: GREEN, backgroundColor: 'rgba(0,208,132,0.08)' }}>
+                ✓ Always free for your customers
+              </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 <a href="mailto:admin@ogrewards.io"
                   className="inline-flex items-center justify-center px-7 py-4 rounded-full font-bold text-black text-base transition-all hover:opacity-90"
