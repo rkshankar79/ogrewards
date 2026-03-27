@@ -3,6 +3,7 @@ import { createServiceClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { PAYOUT_THRESHOLD, LEVEL_THRESHOLDS } from '@/types'
 import WalletCard from '@/components/wallet-card'
+import InstallBanner from '@/components/install-banner'
 
 export default async function DashboardPage({ params }: { params: Promise<{ brand: string }> }) {
   const { brand: slug } = await params
@@ -56,6 +57,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ bran
 
       {/* Cards */}
       <div className="relative z-10 px-4 -mt-4 space-y-4 pt-6">
+        <InstallBanner />
         {wallets && wallets.length > 0 ? (
           wallets.map(wallet => (
             <WalletCard
