@@ -23,11 +23,6 @@ export default function HomePage() {
         <section className="px-6 md:px-16 pt-24 pb-32 max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold mb-8"
-                style={{ borderColor: 'rgba(0,208,132,0.3)', color: GREEN, backgroundColor: 'rgba(0,208,132,0.08)' }}>
-                <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: GREEN }} />
-                Now live in Illinois
-              </div>
               <h1 className="text-5xl md:text-6xl font-black leading-tight tracking-tight mb-6">
                 Bypass the POS.<br />
                 <span style={{ color: GREEN }}>Reward Fans</span><br />
