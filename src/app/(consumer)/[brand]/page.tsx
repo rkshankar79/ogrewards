@@ -49,7 +49,7 @@ export default function LandingPage() {
     const { error: authError } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?brand=${params.brand}`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || window.location.origin}/auth/callback?brand=${params.brand}`,
         data: mode === 'signup' ? { date_of_birth: dob, state: 'IL', brand_slug: params.brand } : {},
       },
     })
