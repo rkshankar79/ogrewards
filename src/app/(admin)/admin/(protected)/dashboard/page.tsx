@@ -38,11 +38,11 @@ export default async function AdminDashboardPage() {
 
   const isLow = Number(brand.reward_pool_balance) < 50
   const stats = [
-    { label: 'Total Scans', value: totalScans || 0, emoji: '📷', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-100' },
-    { label: 'Active Users', value: totalUsers || 0, emoji: '👥', bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-100' },
-    { label: 'Approved Scans', value: approvedScans || 0, emoji: '✅', bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-100' },
-    { label: 'Total Paid Out', value: `$${totalPaid.toFixed(2)}`, emoji: '💸', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-100' },
-    { label: 'Reward Pool', value: `$${Number(brand.reward_pool_balance).toFixed(2)}`, emoji: '💰', bg: isLow ? 'bg-red-50' : 'bg-emerald-50', text: isLow ? 'text-red-700' : 'text-emerald-700', border: isLow ? 'border-red-100' : 'border-emerald-100' },
+    { label: 'Total Scans', value: totalScans || 0, emoji: '📷', style: { backgroundColor: 'rgba(99,102,241,0.1)', borderColor: 'rgba(99,102,241,0.2)', color: '#a5b4fc' } },
+    { label: 'Active Users', value: totalUsers || 0, emoji: '👥', style: { backgroundColor: 'rgba(168,85,247,0.1)', borderColor: 'rgba(168,85,247,0.2)', color: '#d8b4fe' } },
+    { label: 'Approved Scans', value: approvedScans || 0, emoji: '✅', style: { backgroundColor: 'rgba(0,208,132,0.08)', borderColor: 'rgba(0,208,132,0.2)', color: '#00d084' } },
+    { label: 'Total Paid Out', value: `$${totalPaid.toFixed(2)}`, emoji: '💸', style: { backgroundColor: 'rgba(251,191,36,0.08)', borderColor: 'rgba(251,191,36,0.2)', color: '#fbbf24' } },
+    { label: 'Reward Pool', value: `$${Number(brand.reward_pool_balance).toFixed(2)}`, emoji: '💰', style: isLow ? { backgroundColor: 'rgba(239,68,68,0.1)', borderColor: 'rgba(239,68,68,0.2)', color: '#f87171' } : { backgroundColor: 'rgba(0,208,132,0.08)', borderColor: 'rgba(0,208,132,0.2)', color: '#00d084' } },
   ]
 
   return (
@@ -55,12 +55,12 @@ export default async function AdminDashboardPage() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
         {stats.map(stat => (
-          <div key={stat.label} className={`rounded-xl border ${stat.border} ${stat.bg} p-4`}>
+          <div key={stat.label} className="rounded-xl border p-4" style={stat.style}>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-lg">{stat.emoji}</span>
-              <p className={`text-xs font-medium ${stat.text}`}>{stat.label}</p>
+              <p className="text-xs font-medium">{stat.label}</p>
             </div>
-            <p className={`text-2xl font-black ${stat.text}`}>{stat.value}</p>
+            <p className="text-2xl font-black">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -75,42 +75,42 @@ export default async function AdminDashboardPage() {
       {/* Recent scans */}
       <div>
         <h2 className="text-lg font-bold text-gray-900 mb-3">Recent Scans</h2>
-        <div className="rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+        <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-100">
+            <thead style={{ backgroundColor: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
               <tr>
-                <th className="text-left p-3 font-semibold text-gray-600">User</th>
-                <th className="text-left p-3 font-semibold text-gray-600">Store</th>
-                <th className="text-left p-3 font-semibold text-gray-600">Date</th>
-                <th className="text-left p-3 font-semibold text-gray-600">Status</th>
-                <th className="text-right p-3 font-semibold text-gray-600">Reward</th>
+                <th className="text-left p-3 font-semibold" style={{ color: 'rgba(255,255,255,0.4)' }}>User</th>
+                <th className="text-left p-3 font-semibold" style={{ color: 'rgba(255,255,255,0.4)' }}>Store</th>
+                <th className="text-left p-3 font-semibold" style={{ color: 'rgba(255,255,255,0.4)' }}>Date</th>
+                <th className="text-left p-3 font-semibold" style={{ color: 'rgba(255,255,255,0.4)' }}>Status</th>
+                <th className="text-right p-3 font-semibold" style={{ color: 'rgba(255,255,255,0.4)' }}>Reward</th>
               </tr>
             </thead>
             <tbody>
               {recentScans?.map(scan => (
-                <tr key={scan.id} className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
-                  <td className="p-3 text-gray-500 font-mono text-xs">{(scan.user as any)?.email?.split('@')[0]}…</td>
-                  <td className="p-3 font-medium text-gray-800">{scan.store_name || '—'}</td>
-                  <td className="p-3 text-gray-400 text-xs">
+                <tr key={scan.id} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                  <td className="p-3 font-mono text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>{(scan.user as any)?.email?.split('@')[0]}…</td>
+                  <td className="p-3 font-medium text-white">{scan.store_name || '—'}</td>
+                  <td className="p-3 text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
                     {scan.receipt_date ? new Date(scan.receipt_date).toLocaleDateString() : '—'}
                   </td>
                   <td className="p-3">
                     <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                      scan.status === 'approved' ? 'bg-green-100 text-green-700' :
-                      scan.status === 'duplicate' ? 'bg-amber-100 text-amber-700' :
-                      scan.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                      'bg-gray-100 text-gray-500'
+                      scan.status === 'approved' ? 'bg-green-900/40 text-green-400' :
+                      scan.status === 'duplicate' ? 'bg-amber-900/40 text-amber-400' :
+                      scan.status === 'rejected' ? 'bg-red-900/40 text-red-400' :
+                      'bg-white/10 text-white/40'
                     }`}>
                       {scan.status}
                     </span>
                   </td>
-                  <td className="p-3 text-right font-bold text-gray-900">
-                    {scan.reward_amount > 0 ? <span className="text-green-600">+${Number(scan.reward_amount).toFixed(2)}</span> : <span className="text-gray-300">—</span>}
+                  <td className="p-3 text-right font-bold">
+                    {scan.reward_amount > 0 ? <span style={{ color: '#00d084' }}>+${Number(scan.reward_amount).toFixed(2)}</span> : <span style={{ color: 'rgba(255,255,255,0.2)' }}>—</span>}
                   </td>
                 </tr>
               ))}
               {!recentScans?.length && (
-                <tr><td colSpan={5} className="p-8 text-center text-gray-400">No scans yet</td></tr>
+                <tr><td colSpan={5} className="p-8 text-center" style={{ color: 'rgba(255,255,255,0.3)' }}>No scans yet</td></tr>
               )}
             </tbody>
           </table>

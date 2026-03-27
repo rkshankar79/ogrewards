@@ -35,27 +35,27 @@ export default async function DashboardPage({ params }: { params: Promise<{ bran
     return null
   }
 
-  // Get primary brand color for header gradient
-  const primaryBrand = wallets?.[0]?.brand as any
-  const headerColor = primaryBrand?.primary_color || '#1a1a2e'
-
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
+    <div className="min-h-screen pb-24" style={{ backgroundColor: '#080808' }}>
+      {/* Grid bg */}
+      <div className="fixed inset-0 pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(0,208,132,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,208,132,0.03) 1px, transparent 1px)',
+        backgroundSize: '60px 60px',
+      }} />
+
       {/* Header */}
-      <div className="relative overflow-hidden px-5 pt-12 pb-16"
-        style={{ background: `linear-gradient(160deg, ${headerColor} 0%, color-mix(in srgb, ${headerColor} 60%, #0f0f1a) 100%)` }}>
-
-        {/* Decorative circles */}
-        <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full opacity-10" style={{ backgroundColor: '#fff' }} />
-        <div className="absolute -bottom-6 -left-6 h-28 w-28 rounded-full opacity-10" style={{ backgroundColor: '#fff' }} />
-
-        <p className="text-white/60 text-sm font-medium mb-1">Total Balance</p>
-        <p className="text-5xl font-black text-white mb-1">${totalBalance.toFixed(2)}</p>
-        <p className="text-white/50 text-sm">{totalScans} scan{totalScans !== 1 ? 's' : ''} across {wallets?.length || 0} brand{wallets?.length !== 1 ? 's' : ''}</p>
+      <div className="relative px-5 pt-12 pb-16 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 rounded-full pointer-events-none opacity-20"
+          style={{ background: 'radial-gradient(ellipse, #00d084 0%, transparent 70%)', filter: 'blur(40px)' }} />
+        <p className="text-sm font-medium relative" style={{ color: 'rgba(255,255,255,0.4)' }}>Total Balance</p>
+        <p className="text-5xl font-black text-white relative">${totalBalance.toFixed(2)}</p>
+        <p className="text-sm relative mt-1" style={{ color: 'rgba(255,255,255,0.3)' }}>
+          {totalScans} scan{totalScans !== 1 ? 's' : ''} across {wallets?.length || 0} brand{wallets?.length !== 1 ? 's' : ''}
+        </p>
       </div>
 
-      {/* Cards pulled up over header */}
-      <div className="px-4 -mt-6 space-y-4">
+      {/* Cards */}
+      <div className="relative z-10 px-4 -mt-4 space-y-4 pt-6">
         {wallets && wallets.length > 0 ? (
           wallets.map(wallet => (
             <WalletCard
@@ -67,40 +67,40 @@ export default async function DashboardPage({ params }: { params: Promise<{ bran
             />
           ))
         ) : (
-          <div className="rounded-2xl bg-white shadow-sm border p-8 text-center">
+          <div className="rounded-2xl border p-8 text-center" style={{ backgroundColor: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.1)' }}>
             <div className="text-4xl mb-3">📭</div>
-            <p className="font-semibold text-gray-700">No rewards yet</p>
-            <p className="text-sm text-gray-400 mt-1">Scan a receipt to start earning</p>
+            <p className="font-semibold text-white">No rewards yet</p>
+            <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.4)' }}>Scan a receipt to start earning</p>
           </div>
         )}
 
         {/* Recent Scans */}
         {recentScans && recentScans.length > 0 && (
-          <div className="rounded-2xl bg-white shadow-sm border overflow-hidden mt-4">
-            <div className="px-4 py-3 border-b">
-              <h2 className="font-bold text-gray-800">Recent Scans</h2>
+          <div className="rounded-2xl border overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.1)' }}>
+            <div className="px-4 py-3 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+              <h2 className="font-bold text-white">Recent Scans</h2>
             </div>
             {recentScans.map(scan => (
-              <div key={scan.id} className="flex items-center justify-between px-4 py-3 border-b last:border-0">
+              <div key={scan.id} className="flex items-center justify-between px-4 py-3 border-b last:border-0" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
                 <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 rounded-xl flex items-center justify-center text-white text-xs font-bold"
+                  <div className="h-9 w-9 rounded-xl flex items-center justify-center text-white text-xs font-black"
                     style={{ backgroundColor: (scan.brand as any)?.primary_color || '#1a1a2e' }}>
                     {(scan.brand as any)?.name?.[0] || '?'}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-800">{scan.store_name || 'Dispensary'}</p>
-                    <p className="text-xs text-gray-400">{new Date(scan.created_at).toLocaleDateString()}</p>
+                    <p className="text-sm font-semibold text-white">{scan.store_name || 'Dispensary'}</p>
+                    <p className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>{new Date(scan.created_at).toLocaleDateString()}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-bold" style={{ color: scan.reward_amount > 0 ? '#16a34a' : '#9ca3af' }}>
+                  <p className="text-sm font-bold" style={{ color: scan.reward_amount > 0 ? '#00d084' : 'rgba(255,255,255,0.3)' }}>
                     {scan.reward_amount > 0 ? `+$${Number(scan.reward_amount).toFixed(2)}` : '—'}
                   </p>
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                    scan.status === 'approved' ? 'bg-green-100 text-green-700' :
-                    scan.status === 'duplicate' ? 'bg-amber-100 text-amber-700' :
-                    scan.status === 'rejected' ? 'bg-red-100 text-red-600' :
-                    'bg-gray-100 text-gray-500'
+                    scan.status === 'approved' ? 'bg-green-900/50 text-green-400' :
+                    scan.status === 'duplicate' ? 'bg-amber-900/50 text-amber-400' :
+                    scan.status === 'rejected' ? 'bg-red-900/50 text-red-400' :
+                    'bg-white/10 text-white/40'
                   }`}>{scan.status}</span>
                 </div>
               </div>

@@ -6,6 +6,8 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import type { Brand } from '@/types'
 
+const GREEN = '#00d084'
+
 const navItems = [
   { href: '/admin/dashboard', label: 'Dashboard', emoji: '📊' },
   { href: '/admin/skus', label: 'SKU Manager', emoji: '🏷️' },
@@ -27,10 +29,10 @@ export default function AdminSidebar({ brand }: { brand: Brand }) {
   const isLow = Number(brand.reward_pool_balance) < 50
 
   return (
-    <aside className="w-60 min-h-screen flex flex-col bg-gray-900 text-white">
+    <aside className="w-60 min-h-screen flex flex-col border-r" style={{ backgroundColor: '#0a0a0a', borderColor: 'rgba(255,255,255,0.08)' }}>
       {/* Brand header */}
-      <div className="p-5 border-b border-white/10">
-        <div className="flex items-center gap-3 mb-1">
+      <div className="p-5 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+        <div className="flex items-center gap-3">
           {brand.logo_url ? (
             <img src={brand.logo_url} alt={brand.name} className="h-8 w-8 object-contain rounded-lg" />
           ) : (
@@ -40,16 +42,21 @@ export default function AdminSidebar({ brand }: { brand: Brand }) {
             </div>
           )}
           <div>
-            <p className="font-bold text-sm leading-none">{brand.name}</p>
-            <p className="text-white/40 text-xs mt-0.5">Admin Portal</p>
+            <p className="font-bold text-sm text-white leading-none">{brand.name}</p>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.3)' }}>Admin Portal</p>
           </div>
         </div>
       </div>
 
       {/* Pool balance pill */}
-      <div className={`mx-4 mt-4 px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between ${isLow ? 'bg-red-500/20 text-red-300' : 'bg-white/10 text-white/70'}`}>
+      <div className="mx-4 mt-4 px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between"
+        style={{
+          backgroundColor: isLow ? 'rgba(239,68,68,0.1)' : 'rgba(0,208,132,0.08)',
+          border: `1px solid ${isLow ? 'rgba(239,68,68,0.2)' : 'rgba(0,208,132,0.2)'}`,
+          color: isLow ? '#f87171' : GREEN,
+        }}>
         <span>Reward Pool</span>
-        <span className={`font-black text-sm ${isLow ? 'text-red-300' : 'text-white'}`}>
+        <span className="font-black text-sm">
           ${Number(brand.reward_pool_balance).toFixed(2)}
           {isLow && ' ⚠️'}
         </span>
@@ -61,9 +68,13 @@ export default function AdminSidebar({ brand }: { brand: Brand }) {
           const active = pathname === item.href
           return (
             <Link key={item.href} href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                active ? 'bg-white text-gray-900' : 'text-white/60 hover:text-white hover:bg-white/10'
-              }`}>
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
+              style={active
+                ? { backgroundColor: GREEN, color: '#000' }
+                : { color: 'rgba(255,255,255,0.5)' }
+              }
+              onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.06)' }}
+              onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent' }}>
               <span className="text-base">{item.emoji}</span>
               {item.label}
             </Link>
@@ -72,14 +83,17 @@ export default function AdminSidebar({ brand }: { brand: Brand }) {
       </nav>
 
       {/* OGRewards branding */}
-      <div className="px-5 py-3 border-t border-white/10">
-        <p className="text-white/20 text-xs font-semibold tracking-widest uppercase">Powered by OGRewards</p>
+      <div className="px-5 py-3 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+        <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.15)' }}>Powered by OGRewards</p>
       </div>
 
       {/* Sign out */}
-      <div className="p-3 border-t border-white/10">
+      <div className="p-3 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
         <button onClick={handleSignOut}
-          className="w-full text-left px-3 py-2 text-sm text-white/40 hover:text-white rounded-xl hover:bg-white/10 transition-all">
+          className="w-full text-left px-3 py-2 text-sm rounded-xl transition-all"
+          style={{ color: 'rgba(255,255,255,0.3)' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'white'; (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.06)' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.3)'; (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent' }}>
           Sign Out →
         </button>
       </div>
