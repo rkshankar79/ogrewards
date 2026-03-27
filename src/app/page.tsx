@@ -25,7 +25,7 @@ export default function HomePage() {
             <div>
               <h1 className="text-5xl md:text-6xl font-black leading-tight tracking-tight mb-6">
                 Bypass the POS.<br />
-                <span style={{ color: GREEN }}>Reward Fans</span><br />
+                <span style={{ color: GREEN }}>Reward OGs</span><br />
                 Directly.
               </h1>
               <p className="text-lg leading-relaxed mb-6 max-w-lg" style={{ color: 'rgba(255,255,255,0.6)' }}>
