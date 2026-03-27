@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 import { BrandProvider } from '@/lib/brand-context'
 import { notFound } from 'next/navigation'
 
@@ -10,7 +10,7 @@ export default async function BrandLayout({
   params: Promise<{ brand: string }>
 }) {
   const { brand: slug } = await params
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   const { data: brand } = await supabase
     .from('brands')
