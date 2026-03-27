@@ -1,3 +1,5 @@
+'use client'
+
 const GREEN = '#00d084'
 
 export default function LoginPage() {
