@@ -12,10 +12,10 @@ export async function GET(request: NextRequest) {
 
   if (error || !user) return NextResponse.redirect(`${origin}/admin/login?error=auth_failed`)
 
-  // Password reset flow — redirect to set new password
+  // Password reset flow — skip brand_admins check, go straight to reset page
   const type = searchParams.get('type')
   if (type === 'recovery') {
-    return NextResponse.redirect(`${origin}/admin/reset-password`)
+    return NextResponse.redirect(new URL('/admin/reset-password', origin))
   }
 
   // Check if user is a brand admin

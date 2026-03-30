@@ -28,7 +28,7 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   // Protect admin routes (exclude public auth pages)
-  const adminPublicPaths = ['/admin/login', '/admin/forgot-password', '/admin/reset-password']
+  const adminPublicPaths = ['/admin/login', '/admin/forgot-password', '/admin/reset-password', '/auth/admin-callback']
   const isAdminPublic = adminPublicPaths.some(p => request.nextUrl.pathname.startsWith(p))
   if (request.nextUrl.pathname.startsWith('/admin') && !isAdminPublic && !user) {
     return NextResponse.redirect(new URL('/admin/login', request.url))
