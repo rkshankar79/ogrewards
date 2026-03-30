@@ -1,35 +1,32 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 const GREEN = '#00d084'
 
-export default function AdminLoginPage() {
+export default function ResetPasswordPage() {
   const supabase = createClient()
   const router = useRouter()
-  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (password !== confirm) { setError('Passwords do not match.'); return }
+    if (password.length < 8) { setError('Password must be at least 8 characters.'); return }
+
     setLoading(true)
     setError('')
 
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    const { error: authError } = await supabase.auth.updateUser({ password })
 
-    if (authError) {
-      setError('Invalid email or password.')
-      setLoading(false)
-      return
-    }
+    if (authError) { setError(authError.message); setLoading(false); return }
 
-    router.push('/admin/dashboard')
+    router.push('/admin/login?reset=success')
   }
 
   return (
@@ -48,29 +45,26 @@ export default function AdminLoginPage() {
               <span className="h-8 w-8 rounded-lg flex items-center justify-center text-black text-sm font-black" style={{ backgroundColor: GREEN }}>O</span>
               <span className="text-xl font-black text-white">OGRewards</span>
             </a>
-            <h1 className="text-2xl font-black text-white">Brand Admin Portal</h1>
-            <p className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Sign in to manage your rewards</p>
+            <h1 className="text-2xl font-black text-white">New Password</h1>
+            <p className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Choose a strong password</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-white mb-1">Email</label>
+              <label htmlFor="password" className="block text-sm font-medium text-white mb-1">New Password</label>
               <input
-                id="email" type="email" placeholder="you@yourbrand.com" autoComplete="email"
-                value={email} onChange={e => setEmail(e.target.value)} required
+                id="password" type="password" placeholder="Min. 8 characters" autoComplete="new-password"
+                value={password} onChange={e => setPassword(e.target.value)} required
                 className="w-full h-12 px-4 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2"
                 style={{ backgroundColor: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', '--tw-ring-color': GREEN } as React.CSSProperties}
               />
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <label htmlFor="password" className="block text-sm font-medium text-white">Password</label>
-                <a href="/admin/forgot-password" className="text-xs" style={{ color: GREEN }}>Forgot password?</a>
-              </div>
+              <label htmlFor="confirm" className="block text-sm font-medium text-white mb-1">Confirm Password</label>
               <input
-                id="password" type="password" placeholder="••••••••" autoComplete="current-password"
-                value={password} onChange={e => setPassword(e.target.value)} required
+                id="confirm" type="password" placeholder="Repeat password" autoComplete="new-password"
+                value={confirm} onChange={e => setConfirm(e.target.value)} required
                 className="w-full h-12 px-4 rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2"
                 style={{ backgroundColor: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', '--tw-ring-color': GREEN } as React.CSSProperties}
               />
@@ -85,13 +79,9 @@ export default function AdminLoginPage() {
             <button type="submit" disabled={loading}
               className="w-full h-12 rounded-xl font-bold text-black text-base transition-all hover:opacity-90 disabled:opacity-60"
               style={{ backgroundColor: GREEN }}>
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Updating...' : 'Set New Password'}
             </button>
           </form>
-
-          <p className="text-center text-xs mt-6" style={{ color: 'rgba(255,255,255,0.2)' }}>
-            Not a brand partner? <a href="/login" style={{ color: GREEN }}>Customer portal →</a>
-          </p>
         </div>
       </div>
     </div>

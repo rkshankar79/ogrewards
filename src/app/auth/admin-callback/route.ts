@@ -12,6 +12,12 @@ export async function GET(request: NextRequest) {
 
   if (error || !user) return NextResponse.redirect(`${origin}/admin/login?error=auth_failed`)
 
+  // Password reset flow — redirect to set new password
+  const type = searchParams.get('type')
+  if (type === 'recovery') {
+    return NextResponse.redirect(`${origin}/admin/reset-password`)
+  }
+
   // Check if user is a brand admin
   const serviceSupabase = createServiceClient()
   const { data: adminRecord } = await serviceSupabase
