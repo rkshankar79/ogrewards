@@ -1,6 +1,7 @@
-import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import SuperAdminSignOut from '@/components/superadmin-signout'
 
 const SUPER_ADMIN_EMAILS = ['rkshankar@gmail.com']
 
@@ -44,7 +45,8 @@ export default async function SuperAdminLayout({ children }: { children: React.R
         </nav>
 
         <div className="p-3 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-          <p className="text-xs px-3" style={{ color: 'rgba(255,255,255,0.2)' }}>{user.email}</p>
+          <p className="text-xs px-3 mb-2" style={{ color: 'rgba(255,255,255,0.2)' }}>{user.email}</p>
+          <SuperAdminSignOut />
         </div>
       </aside>
 
