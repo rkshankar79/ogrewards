@@ -1,5 +1,7 @@
 'use client'
 
+import Link from 'next/link'
+
 const GREEN = '#00d084'
 
 export default function LoginPage() {
@@ -23,7 +25,7 @@ export default function LoginPage() {
         <p className="text-sm mb-8" style={{ color: 'rgba(255,255,255,0.4)' }}>Select to continue</p>
 
         <div className="space-y-3">
-          <a href="/nightphantom"
+          <Link href="/nightphantom"
             className="flex items-center justify-between w-full px-5 py-4 rounded-2xl border font-semibold text-white transition-all hover:border-opacity-60"
             style={{ backgroundColor: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)' }}>
             <div className="flex items-center gap-3">
@@ -34,9 +36,9 @@ export default function LoginPage() {
               </div>
             </div>
             <span style={{ color: GREEN }}>→</span>
-          </a>
+          </Link>
 
-          <a href="/admin/login"
+          <Link href="/admin/login"
             className="flex items-center justify-between w-full px-5 py-4 rounded-2xl border font-semibold text-white transition-all hover:border-opacity-60"
             style={{ backgroundColor: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)' }}>
             <div className="flex items-center gap-3">
@@ -47,10 +49,10 @@ export default function LoginPage() {
               </div>
             </div>
             <span style={{ color: GREEN }}>→</span>
-          </a>
+          </Link>
         </div>
 
-        <a href="/" className="block mt-8 text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>← Back to home</a>
+        <Link href="/" className="block mt-8 text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>← Back to home</Link>
       </div>
     </div>
   )
