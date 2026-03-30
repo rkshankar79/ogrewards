@@ -36,7 +36,7 @@ export async function proxy(request: NextRequest) {
 
   // Protect superadmin routes
   if (request.nextUrl.pathname.startsWith('/superadmin') && !user) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/admin/login', request.url))
   }
 
   return supabaseResponse
