@@ -27,9 +27,11 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Protect admin routes
-  if (request.nextUrl.pathname.startsWith('/admin') && !user) {
-    return NextResponse.redirect(new URL('/login', request.url))
+  // Protect admin routes (exclude public auth pages)
+  const adminPublicPaths = ['/admin/login', '/admin/forgot-password', '/admin/reset-password']
+  const isAdminPublic = adminPublicPaths.some(p => request.nextUrl.pathname.startsWith(p))
+  if (request.nextUrl.pathname.startsWith('/admin') && !isAdminPublic && !user) {
+    return NextResponse.redirect(new URL('/admin/login', request.url))
   }
 
   // Protect superadmin routes
